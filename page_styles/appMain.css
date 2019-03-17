@@ -1,0 +1,255 @@
+html, body, div {
+	margin:0; padding:0;
+}
+div { font-family:segoe UI, helvetica, verdana; }
+.container { display:flex; flex-flow:row wrap; }
+
+#noticeZone { pointer-events: none; }
+.cNotice.fail {
+	background:rgba(255,0,0,0.3);
+	color:rgba(200,0,0,0.5);
+}
+.cNotice.okay {
+	background:rgba(0,255,0,0.3);
+	color:rgba(0,100,0,0.5);
+}
+.cNotice.info {
+	background:rgba(0,150,255,0.3);
+	color:rgba(0,50,150,0.8);
+}
+
+.drawZone #drawCanv { display:block; }
+
+@media screen and (max-width:900px) {
+	#noticeZone {
+		position:fixed;
+		width:100%;
+		display:flex; flex-flow:row wrap;
+	}
+	.cNotice {
+		flex:0 100%;
+		display:flex; flex-flow:row wrap;
+		text-align:center;
+	}
+	.cNotice .cNoticeTitle {
+		flex:0 100%;
+		font-size: 20px; font-weight:bold;
+		font-family:verdana; color:inherit;
+	}
+	.cNotice .cNoticeMsg {
+		flex:0 100%; padding:3px 5px;
+		font-size:17px; font-family:verdana;
+		color:inherit;
+	}
+	.toolZone {
+		flex:0 20%;
+		display:flex; flex-flow:row wrap;
+	}
+	.toolZone .tool {
+		flex:0 20%;
+		display:flex; flex-flow:row wrap;
+		border:solid 1px #000000; border-radius:5px;
+		box-shadow:0 0 5px #00000085;
+	}
+	.tool.inactive .toolRange,
+	.tool .toolValue.inactive {
+		display:none;
+	}
+	.toolZone .tool#saveToolZone { order:2; }
+	.toolZone .tool#saveToolZone #saveTool { display:flex; flex-flow:row wrap; margin:0 auto;}
+	.toolZone .tool#saveToolZone #saveTool #save .saveDate{ text-align:center; }
+	.toolZone .tool#saveToolZone .toolBtn .imgButton {
+		display:block; flex:0 100%; width:50%;
+		margin:3px auto; text-align:center; padding:3px;
+		border:solid 1px #aaaaaa; border-radius:5px;
+		background:#888888; color:#fff; font-weight:bold;
+	}
+	.toolZone .tool#saveToolZone img {
+		width:100%;
+	}
+	.toolZone .tool .toolLabel {
+		flex:0 100%;
+		margin:0 auto;
+		cursor:pointer; -ms-cursor:pointer; -moz-cursor:pointer; -o-cursor:pointer; -webkit-cursor:pointer;
+		font-weight:bold; text-align:center;
+	}
+	.toolZone .tool .toolRange {
+		flex:0 100%;
+		text-align:center;
+	}
+	.toolZone .tool .toolValue .valueNumber {
+		flex:0 100%;
+		text-align:center;
+	}
+	
+	.toolZone .tool .currBrushZone {
+		order:1;
+		display:flex; flex-flow:row wrap;
+		justify-content:center; align-items:center;
+		width:150px; height:150px; margin:0 auto;
+	}
+	.toolZone .tool #currBrush {
+		border-radius:50%;
+	}
+	
+	.toolZone .tool.colour{
+		flex:0 100%;
+		display:flex; flex-flow:row wrap;
+		justify-content:center; align-items:center;
+	}
+	.toolZone .tool .subTool {
+		flex:0 25%;
+	}
+	
+	.toolZone .tool#clrBtn {
+		display:flex; flex-flow:row wrap;
+		justify-content: center; align-items:center;
+		background:#ff4422;
+		user-select:none; -ms-user-select:none; -moz-user-select:none; -o-user-select:none; -webkit-user-select:none;
+		cursor:pointer; -ms-cursor:pointer; -moz-cursor:pointer; -o-cursor:pointer; -webkit-cursor:pointer;
+	}
+	.toolZone .tool#clrBtn .toolLabel.clrLabel {
+		color:#ffcccc; font-weight:bold;
+	}
+}
+@media screen and (min-width:901px){
+	.container {
+		background:rgb(0,0,0);
+		display:flex; flex-flow:row wrap;
+	}
+    .drawZone {
+        position:relative;
+        flex:0 45%; padding:5px;
+        justify-content:center;
+    }
+	.drawZone #noticeZone {
+        width:75%;
+        display:flex; flex-flow:row wrap;
+        position:absolute;
+        top:15px; left:12.5%;
+	}
+	.cNotice {
+		flex:0 100%;
+		display:flex; flex-flow:row wrap;
+		text-align:center;
+	}
+	.cNotice .cNoticeTitle {
+		flex:0 100%;
+		font-size: 20px; font-weight:bold;
+		font-family:verdana; color:inherit;
+	}
+	.cNotice .cNoticeMsg {
+		flex:0 100%; padding:3px 5px;
+		font-size:17px; font-family:verdana;
+		color:inherit;
+    }
+    .drawZone #drawCanv {
+        margin:0 auto;
+    }
+	.toolZone {
+		flex:1 45%;
+        display:flex; flex-flow:row wrap;
+        margin:0 auto;
+	}
+	.drawZone #drawCanv {
+		background:rgb(255,255,255);
+		cursor:none;
+	}
+	.toolZone .tool {
+		display:flex; flex-flow:row wrap;
+		background:rgb(240,240,240); border-radius:5px;
+		user-select:none; -moz-user-select:none; -ms-user-select:none; -o-user-select:none;
+		box-shadow:0 0 5px rgba(0,0,0,0.5);
+		margin:5px auto;
+	}
+	.toolZone .tool .toolLabel {
+        flex:0 100%;
+		background:rgb(200,200,200);
+		font-weight:bold;
+		text-align:center; padding:5px 0;
+	}
+	.toolZone .tool .toolValue {
+		flex:0 100%;
+		display:flex; flex-flow:row wrap;
+		text-align:center;
+	}
+	.toolZone .tool .toolValue .valueNumber {
+		margin:0 auto;
+		flex:0 5%;
+	}
+	.toolZone .tool .toolRange {
+		flex:0 70%;
+		text-align:right;
+	}
+	.toolZone .tool .toolValue .valueNumber.valueRange {
+		margin:0;
+		padding-left:5px;
+		font-weight:bold;
+	}
+	.toolZone #saveToolZone .saveWarn {
+		width:350px;
+	}
+	.toolZone #saveToolZone #saveTool {
+		background:rgb(150,150,150);
+		width:550px; height:130px; margin:0 auto;
+	}
+	.toolZone #saveToolZone #save {
+		width:100px; margin:3px;
+		background:rgb(200,200,200);
+	}
+	.toolZone #saveToolZone #saveTool .saveImg {
+		width:100%; background:rgba(255,255,255,0.4);
+	}
+	.toolZone .tool .currBrushZone {
+		display:flex; flex-flow:row wrap;
+		justify-content:center; align-items:center;
+		width:150px; height:150px; margin:0 auto;
+		background:rgb(150,150,150);
+	}
+	.toolZone .tool #currBrush {
+		border-radius:50%;
+	}
+	
+	.toolZone .tool.colour {
+		flex:0 100%;
+		display:flex; flex-flow:row wrap;
+	}
+	.toolZone .tool .subTool {
+		margin:8px auto;
+		box-shadow:0 0 5px rgba(0,0,0,0.5);
+		border-top-left-radius:10px;
+		border-top-right-radius:10px;
+	}
+	.toolZone .tool .subTool .toolLabel {
+		border-top-left-radius:10px;
+		border-top-right-radius:10px;
+	}
+	.toolZone .tool .subTool .toolValue {
+		padding:0 5px;
+	}
+	.toolZone .tool .subTool .toolValue .valueNumber.valueRange {
+		width:35px;
+		margin:0 auto;
+	}
+	
+	.toolZone .toolValue .toolDrop {
+		width:100%;
+	}
+	.toolZone .toolValue .toolDrop #mode {
+		width:100%;
+		margin:0 auto; display:block;
+		font-size:20px;
+	}
+	
+	.toolZone .tool#clrBtn {
+		flex:100%; padding:3px;
+		background:rgb(255,85,85);
+		color:rgb(255,240,240); font-weight:bold;
+		text-align:center;
+		cursor:pointer; user-select:none;
+	}
+	.toolZone .tool#clrBtn .toolLabel.clrLabel {
+		text-align:center; margin:0 auto;
+		background:none;
+	}
+}

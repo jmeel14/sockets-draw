@@ -1,0 +1,18 @@
+{
+    "app": {
+        "head": {
+            "title": "HTML5 Multi-user Drawing Application",
+            "scripts": [
+                "appS.js",
+                "app.js",
+                "pressure.js",
+                "socket.io.slim.js"
+            ],
+            "style": "appMain.css"
+        },
+        "body": {
+            "htmlBody": "app.html",
+            "footer": "footer.html"
+        }
+    }
+}

@@ -1,0 +1,105 @@
+<div class="container">
+	<div class="drawZone">
+		<div id="noticeZone"></div>
+		<canvas id="drawCanv" width="900px" height="900px">Looks like your browser doesn't support the &lt;canvas&gt; feature.</canvas>
+	</div>
+	<div class="toolZone">
+		<div class="tool" id="saveToolZone">
+			<div class="toolLabel" id="labelSaves">Saves</div>
+			<div class="toolValue">
+				<div id="saveTool"></div>
+				<div class="toolBtn">
+					<button class="imgButton" id="saveBtn">Save</button>
+					<a class="imgButton" id="dlBtn">Download</a>
+					<a class="imgButton" id="dlBtnCode">Download (as code)</a>
+					<div class="saveWarn"><b>Warning:</b> This may either not work, or cause your browser to slow down on weak, old machines. Use at own risk.</div>
+				</div>
+			</div>
+		</div>
+		<div class="tool">
+			<div class="currBrushZone">
+				<div id="currBrush"></div>
+			</div>
+		</div>
+		<div class="tool">
+			<div class="toolLabel">Zoom</div>
+			<div class="toolValue">
+				<div class="toolRange">
+					<input type="range" id="zoomVal" min="1" max="25" step="0.5" value="1">
+				</div>
+				<div class="valueNumber" id="zoomLevel"></div>
+			</div>
+		</div>
+		<div class="tool">
+			<div class="toolLabel">Pan</div>
+			<div class="toolValue">
+				<div class="toolLabel">Left/Right</div>
+				<div class="toolRange">
+					<input type="range" id="panX" min="-10" max="10" value="0">
+				</div>
+				<div id="panValX" class="valueNumber valueRange">0</div>
+				<div class="toolLabel">Up/Down</div>
+				<div class="toolRange">
+					<input type="range" id="panY" min="-10" max="10" value="0">
+				</div>
+				<div id="panValY" class="valueNumber valueRange">0</div>
+			</div>
+		</div>
+		<div class="tool" id="toolSize">
+			<div class="toolLabel">Size</div>
+			<div class="toolValue">
+				<div class="toolRange"><input type="range" id="bSize" min="1" max="100" value="1"></div>
+				<div class="valueNumber valueRange" id="bSizeVal">1</div>
+			</div>
+		</div>
+		<div class="tool colour">
+			<div class="toolLabel">Colour</div>
+			<div class="subTool">
+				<div class="toolLabel">Red</div>
+				<div class="toolValue">
+					<div class="toolRange"><input type="range" id="colRed" min="0" max="255" value="0"></div>
+					<div class="valueNumber valueRange" id="colRedVal">0</div>
+				</div>
+			</div>
+			<div class="subTool">
+				<div class="toolLabel">Green</div>
+				<div class="toolValue">
+					<div class="toolRange"><input type="range" id="colGreen" min="0" max="255" value="0"></div>
+					<div class="valueNumber valueRange" id="colGreenVal">0</div>
+				</div>
+			</div>
+			<div class="subTool">
+				<div class="toolLabel">Blue</div>
+				<div class="toolValue">
+					<div class="toolRange"><input type="range" id="colBlue" min="0" max="255" value="0"></div>
+					<div class="valueNumber valueRange" id="colBlueVal" >0</div>
+				</div>
+			</div>
+			<div class="subTool">
+				<div class="toolLabel">Alpha</div>
+				<div class="toolValue">
+					<div class="toolRange"><input type="range" id="colAlpha" min="0" max="100" value="100"></div>
+					<div class="valueNumber valueRange" id="colAlphaVal" >100</div>
+				</div>
+			</div>
+		</div>
+		<div class="tool">
+			<div class="toolLabel">Blend mode</div>
+			<div class="toolValue">
+				<div class="toolDrop">
+					<select id="mode">
+						<option value="nml">Normal</option>
+						<option value="ltn">Lighten</option>
+						<option vlaue="dkn">Darken</option>
+						<option value="mtp">Multiply</option>
+						<option value="inv">Invert</option>
+						<option value="bhnd">Behind</option>
+					</select>
+				</div>
+			</div>
+		<div class="tool" id="clrBtn">
+			<div class="toolLabel clrLabel">Nuke canvas</div>
+		</div>
+		<output id="mobOut"></output>
+	</div>
+</div>
