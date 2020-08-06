@@ -6,7 +6,7 @@ const ph = require("./scripts/pageHandler.js");
 const ch = require('./scripts/connHandler.js');
 
 const httpServer = httpLib.createServer(handler);
-httpServer.listen('1988');
+httpServer.listen(process.env.PORT || '1988');
 
 function handler(req, resp){
     ph.pageConfirm(req.url, function(noFind, status, find){

@@ -8,10 +8,10 @@ window.addEventListener("load", function () {
 	var drawCanv = document.getElementById("drawCanv");
 	var drawCtx = drawCanv.getContext("2d");
 	if (window.innerHeight < drawCanv.height) {
-		drawCanv.height = 600;
+		drawCanv.height = 400;
 	}
 	if (window.innerWidth < drawCanv.width) {
-		drawCanv.width = window.innerWidth;
+		drawCanv.width = 400;
 	}
 
 
@@ -68,6 +68,7 @@ window.addEventListener("load", function () {
 		slider: document.getElementById("zoomVal"),
 		output: document.getElementById("zoomLevel")
 	}
+	var ignoreScroll = false;
 	var panElems = {
 		panX: {
 			slider: document.getElementById("panX"),
@@ -105,7 +106,9 @@ window.addEventListener("load", function () {
 		"dkn": "darken",
 		"mtp": "multiply",
 		"inv": "difference",
-		"bhnd": "destination-over"
+		"bhnd": "destination-over",
+		"sub": "source-atop",
+		"ers": "destination-out"
 	}
 
 	var clrElem = document.getElementById("clrBtn");
@@ -126,16 +129,17 @@ window.addEventListener("load", function () {
 		zoomElems.output.innerText = val.toString() + 'x';
 	}
 	setZoom(1);
+	function zoomMaths(zOff, mOffs, zFactor){
+		zoomOffs = [
+			zOff[0] / zoomFactor,
+			zOff[1] / zoomFactor
+		]
+		return zoomOffs;
+	}
 
 	zoomElems.slider.addEventListener("input", function(){
 		zoomElems.output.innerText = zoomElems.slider.value.toString() + 'x'
 		zoomFactor = zoomElems.slider.value;
-		zoomOff = [
-			
-		]
-		scalechange = newscale - oldscale;
-		offsetX = -(zoomPointX * scalechange);
-		offsetY = -(zoomPointY * scalechange);
 	});
 	function setPan(pan, val){ pan.output.innerText = val; }
 	for(let panHandle in panElems){
@@ -225,7 +229,7 @@ window.addEventListener("load", function () {
 		if (appActive) {
 			drawCtx.lineWidth = 1;
 			let drawPos = [locX, locY];
-			let drawSize = size * (zoomFactor / 2);
+			let drawSize = (size / 4) * zoomFactor;
 
 			drawCtx.globalCompositeOperation = "source-over";
 			drawCtx.strokeStyle = 'rgba(255,255,255,0.5)';
@@ -343,13 +347,13 @@ window.addEventListener("load", function () {
 		drawCtx.strokeStyle = animData.brushCol;
 		drawCtx.lineCap = "round";
 		drawCtx.lineJoin = "round";
-		drawCtx.lineWidth = animData.brushSize * zoomFactor;
+		drawCtx.lineWidth = animData.brushSize * (zoomFactor / 2);
 		drawCtx.beginPath();
 		for (var i = 0; i < animData.brushStrokes.length; i++) {
 			let bStrokeList = animData.brushStrokes[i];
 			let drawPos = [
-				((zoomOff[0] / zoomFactor) - ((zoomOff[0] - bStrokeList[0]) * (zoomFactor * 0.99))),
-				((zoomOff[1] / zoomFactor) - ((zoomOff[1] - bStrokeList[1]) * (zoomFactor * 0.99)))
+				(bStrokeList[0] + zoomOff[0]) * zoomFactor,
+				(bStrokeList[1] + zoomOff[1]) * zoomFactor
 			];
 			drawAnim(drawPos);
 		}
@@ -538,8 +542,8 @@ window.addEventListener("load", function () {
 					ev.offsetY / zoomFactor
 				]
 				setDrawing(conn, [
-					cursorPos[0] + zoomOff[0],
-					cursorPos[1] + zoomOff[1]
+					cursorPos[0],
+					cursorPos[1]
 				]);
 			}
 		});
@@ -553,8 +557,8 @@ window.addEventListener("load", function () {
 				if (!isFocused) {
 					isDrawing = true;
 					let touchLoc = [
-						ev.offsetX / zoomFactor,
-						ev.offsetY / zoomFactor
+						ev.offsetX,
+						ev.offsetY
 					];
 					setDrawing(conn, [touchLoc[0], touchLoc[1]]);
 				}
@@ -565,6 +569,7 @@ window.addEventListener("load", function () {
 				ev.offsetX,
 				ev.offsetY
 			];
+			
 			let cursorPos = [
 				(cursorLast[0] / zoomFactor) + zoomOff[0],
 				(cursorLast[1] / zoomFactor) + zoomOff[1]
@@ -620,27 +625,27 @@ window.addEventListener("load", function () {
 				transferCursor(conn, "currSize", bSize, { drawing: isDrawing });
 			}
 			else {
-				let modZoom = 1.25
+				if(ignoreScroll){ console.log("Ignoring scroll attempt!"); return;}
+				ignoreScroll = true;
+				window.setTimeout(function(){
+					ignoreScroll = false;
+				},25);
+				let modZoom = 0.5;
+				let currZoom = zoomFactor;
 				if(ev.deltaY < 0 && zoomFactor < 25){
 					setZoom(zoomFactor + modZoom);
-					zoomOff = [
-						ev.offsetX,
-						ev.offsetY
-					];
 				}
 				else if(ev.deltaY > 0 && zoomFactor > 0){
-					if(zoomFactor - modZoom < 0){
+					if(zoomFactor - modZoom <= 0){
 						setZoom(1);
 						zoomOff = [0, 0];
+						return;
 					}
 					else {
-						setZoom(zoomFactor - 1.25);
-						zoomOff = [
-							ev.offsetX,
-							ev.offsetY
-						]
+						setZoom(zoomFactor - modZoom);
 					}
 				}
+				zoomOff = zoomMaths(zoomOff, [ev.offsetX, ev.offsetY], zoomFactor)
 			}
 		});
 		drawCanv.addEventListener("mouseleave", function () {
@@ -687,7 +692,7 @@ window.addEventListener("load", function () {
 						type: "fail",
 						title: "Failure",
 						message: [
-							'The board has not been running for long enough.',
+							'The board has not been running for long enough!',
 							`Please wait ${response} seconds.`
 						]
 					}
@@ -852,12 +857,42 @@ window.addEventListener("load", function () {
 							currsList[cursor].pos.locY
 							, true);
 					}
+					drawCtx.strokeStyle = "rgb(255,0,0)";
+					drawCtx.rect(0, 0, drawCanv.width / 4, drawCanv.height / 4);
+					drawCtx.stroke();
+					drawCtx.strokeStyle = "rgb(255,240,0)";
+					drawCtx.rect(
+						zoomOff[0] / 4,
+						zoomOff[1] / 4,
+						(drawCanv.width / 4) / zoomFactor,
+						(drawCanv.height / 4) / zoomFactor
+					);
+					drawCtx.stroke();
+
+					drawCtx.strokeStyle = "rgba(255,0,0,0.25)";
+					drawCtx.beginPath();
+					drawCtx.lineTo(0, (cursorLast[1] / zoomFactor) / 4);
+					drawCtx.lineTo((drawCanv.width / zoomFactor) / 4, (cursorLast[1] / zoomFactor) / 4);
+					drawCtx.closePath();
+					drawCtx.stroke();
+					drawCtx.beginPath();
+					drawCtx.lineTo((cursorLast[0] / zoomFactor) / 4, 0);
+					drawCtx.lineTo((cursorLast[0] / zoomFactor) / 4, (drawCanv.height / zoomFactor) / 4);
+					drawCtx.closePath();
+					drawCtx.stroke();
+					drawCtx.fillStyle = "rgba(255,0,0,0.25)";
+					drawCtx.font = "15px verdana";
+					drawCtx.textAlign = "end";
+					drawCtx.fillText(
+						`OffsetX Percentage: ${Math.floor((cursorLast[0] / drawCanv.width) * 100)}%`,
+						drawCanv.width / 4, (drawCanv.height / 4) / 10
+					);
 				}
 				activityCounter++;
 				if (activityCounter > 3600) {
 					isActive = false;
 				}
-			}, 0);
+			}, 15);
 
 			conn.on("userRemove", function (data) {
 				if (currsList[data]) {
